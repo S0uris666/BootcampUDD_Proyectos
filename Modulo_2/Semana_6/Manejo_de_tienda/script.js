@@ -2,11 +2,11 @@ function manejoTienda(productosIniciales = []) {
   //validar
   const inventario = Array.isArray(productosIniciales)
     ? productosIniciales.filter(
-        (p) =>
-          p.nombre &&
-          typeof p.precio === "number" &&
-          typeof p.cantidad === "number"
-      )
+      (p) =>
+        p.nombre &&
+        typeof p.precio === "number" &&
+        typeof p.cantidad === "number"
+    )
     : [];
   return {
     inventario,
@@ -46,19 +46,19 @@ function manejoTienda(productosIniciales = []) {
       }
     },
     calcularValorTotal() {
-        const total = this.inventario.reduce((sum, p) => {
-          return sum + p.precio * p.cantidad;
-        }, 0);
-        console.log(`El valor total del inventario es: $${total}`);
-        return total;
-    }
+      const total = this.inventario.reduce((sum, p) => {
+        return sum + p.precio * p.cantidad;
+      }, 0);
+      console.log(`El valor total del inventario es: $${total}`);
+      return total;
+    },
   };
 }
 
 //Ejemplo de uso
 const tienda = manejoTienda([
-    { nombre: "Laptop", precio: 1000, cantidad: 5 },
-    { nombre: "Mouse", precio: 25, cantidad: 20 },
+  { nombre: "Laptop", precio: 1000, cantidad: 5 },
+  { nombre: "Mouse", precio: 25, cantidad: 20 },
 ]);
 
 tienda.agregarProducto({ nombre: "Teclado", precio: 50, cantidad: 10 });

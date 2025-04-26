@@ -3,7 +3,7 @@ function manejoTienda(productosIniciales = []) {
   const inventario = Array.isArray(productosIniciales)
     ? productosIniciales.filter(
       (p) =>
-        p.nombre &&
+        p.nombre  &&
         typeof p.precio === "number" &&
         typeof p.cantidad === "number"
     )

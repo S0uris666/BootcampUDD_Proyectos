@@ -15,7 +15,6 @@ class Pregunta {
       console.error("Índice de opción inválido."); // Control de flujo ante errores
     }
   }
-
   // Obtener resultados como array de strings
   Mostrar() {
     return this.opciones.map(
@@ -80,66 +79,75 @@ class Encuesta {
   }
 }
 
-// interaccion con el usuario
-const titulo = prompt("Ingresa el título de tu encuesta:");
-const encuesta = new Encuesta(titulo);
+// interaccion con el usuario//ahora como funcion
+function crearYVotarEncuesta() {
+  const titulo = prompt("Ingresa el título de tu encuesta:");
+  const encuesta = new Encuesta(titulo);
 
-// 2. Agregar 8 preguntas con 3 opciones cada una
-for (let i = 0; i < 8; i++) {
-  const texto = prompt(`Escribe el texto de la pregunta ${i + 1}:`);
-  const opciones = [];
-  for (let j = 0; j < 3; j++) {
-    const opcion = prompt(`Ingresa la opción ${j + 1} para la pregunta ${i + 1}:`);
-    opciones.push(opcion);
+  // Agregar 8 preguntas
+  for (let i = 0; i < 8; i++) {
+    const texto = prompt(`Escribe el texto de la pregunta ${i + 1}:`);
+    const opciones = [];
+    for (let j = 0; j < 3; j++) {
+      const opcion = prompt(`Ingresa la opción ${j + 1} para la pregunta ${i + 1}:`);
+      opciones.push(opcion);
+    }
+    encuesta.agregarPreguntas(texto, opciones);
   }
-  encuesta.agregarPreguntas(texto, opciones);
+
+  // Agregar más preguntas si se desea
+  let agregarMas = confirm("¿Deseas agregar más preguntas a la encuesta?");
+  while (agregarMas) {
+    const texto = prompt("Escribe el texto de la nueva pregunta:");
+    const opciones = [];
+    for (let j = 0; j < 3; j++) {
+      const opcion = prompt(`Ingresa la opción ${j + 1}:`);
+      opciones.push(opcion);
+    }
+    encuesta.agregarPreguntas(texto, opciones);
+    agregarMas = confirm("¿Deseas agregar otra pregunta más?");
+  }
+
+  encuesta.finalizarEncuesta();
+
+  // Votación
+  let seguirVotando = true;
+  while (seguirVotando) {
+    let preguntaIndex = parseInt(prompt(`¿Sobre qué pregunta quieres votar? (1 a ${encuesta.preguntas.length})`)) - 1;
+
+    if (isNaN(preguntaIndex) || preguntaIndex < 0 || preguntaIndex >= encuesta.preguntas.length) {
+      alert("Número de pregunta inválido.");
+      continue;
+    }
+
+    const pregunta = encuesta.preguntas[preguntaIndex];
+    let opcionesTexto = "";
+    pregunta.opciones.forEach((opcion, i) => {
+      opcionesTexto += `${i + 1}. ${opcion}\n`;
+    });
+
+    let opcionElegida = parseInt(prompt(`\n${pregunta.texto}\n${opcionesTexto}\nElige una opción:`)) - 1;
+
+    if (isNaN(opcionElegida) || opcionElegida < 0 || opcionElegida >= pregunta.opciones.length) {
+      alert("Opción inválida.");
+      continue;
+    }
+
+    encuesta.vote(preguntaIndex, opcionElegida);
+    seguirVotando = confirm("¿Deseas seguir votando?");
+  }
+
+  encuesta.mostrarResultados();
 }
-// 3. Preguntar si quiere agregar más preguntas
-let agregarMas = confirm("¿Deseas agregar más preguntas a la encuesta?");
-while (agregarMas) {
-  const texto = prompt(`Escribe el texto de la nueva pregunta:`);
-  const opciones = [];
-  for (let j = 0; j < 3; j++) {
-    const opcion = prompt(`Ingresa la opción ${j + 1}:`);
-    opciones.push(opcion);
-  }
-  encuesta.agregarPreguntas(texto, opciones);
 
-  agregarMas = confirm("¿Deseas agregar otra pregunta más?");
+// Función principal que permite crear varias encuestas
+function iniciarSistemaEncuestas() {
+  let crearOtra = true;
+  while (crearOtra) {
+    crearYVotarEncuesta();
+    crearOtra = confirm("¿Deseas crear otra encuesta?");
+  }
 }
 
-//  Finalizar encuesta
-encuesta.finalizarEncuesta(); // aqui sucede que el terminar encuesta esta demas ya que el for obliga que sea 8 preguntas, pero lo dejo para que se vea el flujo de la encuesta, antes lo necesitaba porque estaba implementandolo solo con clases
-
-let seguirVotando = true;
-while (seguirVotando) {
-  let preguntaIndex = parseInt(prompt("¿Sobre qué pregunta quieres votar? (1 a 8)")) - 1;
-
-  if (isNaN(preguntaIndex) || preguntaIndex < 0 || preguntaIndex >= encuesta.preguntas.length) {
-    alert("Número de pregunta inválido.");
-    continue;
-  }
-
-  const pregunta = encuesta.preguntas[preguntaIndex];
-
-  let opcionesTexto = "";
-  pregunta.opciones.forEach((opcion, i) => {
-    opcionesTexto += `${i + 1}. ${opcion}\n`;
-  });
-
-  let opcionElegida = parseInt(prompt(`\n${pregunta.texto}\n${opcionesTexto}\nElige una opción:`)) - 1;
-
-  if (isNaN(opcionElegida) || opcionElegida < 0 || opcionElegida >= pregunta.opciones.length) {
-    alert("Opción inválida.");
-    continue;
-  }
-
-  encuesta.vote(preguntaIndex, opcionElegida);
-  seguirVotando = confirm("¿Deseas seguir votando?");
-}
-
-// 5. Mostrar resultados
-encuesta.mostrarResultados();
-
-
-//Para mejorar
+// Ejecutar el sistema
+iniciarSistemaEncuestas();

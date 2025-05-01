@@ -1,108 +1,133 @@
 // Clase que representa una sola pregunta de la encuesta
 class Pregunta {
-    constructor(texto, opciones) {
-      this.texto = texto; // Texto de la pregunta
-      this.opciones = opciones; // Opciones de respuesta (array)
-      this.votes = new Array(opciones.length).fill(0); // Se crea un array del mismo largo que las opciones, lleno de ceros, para contar los votos por opción
-    }
-  
-    // Método para votar por una opción (usamos operadores de comparación y aritméticos)
-    vote(opcionesIndex) {
-      if (opcionesIndex >= 0 && opcionesIndex < this.opciones.length) {// evita errores de índice, por ejemplo, si el usuario ingresa un número fuera del rango de opciones
-        this.votes[opcionesIndex]++; // Suma 1 voto a la opción seleccionada
-      } else {
-        console.error("Índice de opción inválido."); // Control de flujo ante errores
-      }
-    }
-  
-    // Obtener resultados como array de strings
-    Mostrar() {
-      return this.opciones.map((opcion, i) => `${opcion}: ${this.votes[i]} votos`);
+  constructor(texto, opciones) {
+    this.texto = texto; // Texto de la pregunta
+    this.opciones = opciones; // Opciones de respuesta (array)
+    this.votes = new Array(opciones.length).fill(0); // Se crea un array del mismo largo que las opciones, lleno de ceros, para contar los votos por opción
+  }
+
+  // Método para votar por una opción (usamos operadores de comparación y aritméticos)
+  vote(opcionesIndex) {
+    if (opcionesIndex >= 0 && opcionesIndex < this.opciones.length) {
+      // evita errores de índice, por ejemplo, si el usuario ingresa un número fuera del rango de opciones
+      this.votes[opcionesIndex]++; // Suma 1 voto a la opción seleccionada
+    } else {
+      console.error("Índice de opción inválido."); // Control de flujo ante errores
     }
   }
-  
-  // Clase para manejar una encuesta completa con varias preguntas
-  class Encuesta {
-    constructor(nombre) {
-      this.nombre = nombre;
-      this.preguntas = []; // Contenedor de preguntas (objetos Pregunta)
-      this.permitirVotar = false;
+
+  // Obtener resultados como array de strings
+  Mostrar() {
+    return this.opciones.map(
+      (opcion, i) => `${opcion}: ${this.votes[i]} votos`
+    );
+  }
+}
+
+// Clase para manejar una encuesta completa con varias preguntas
+class Encuesta {
+  constructor(nombre) {
+    this.nombre = nombre;
+    this.preguntas = []; // Contenedor de preguntas (objetos Pregunta)
+    this.permitirVotar = false;
+  }
+
+  // Agrega una pregunta nueva a la encuesta
+  agregarPreguntas(preguntaTexto, opciones) {
+    if (opciones.length < 2) {
+      console.error("Una pregunta debe tener al menos 2 opciones.");
+      return;
     }
-  
-    // Agrega una pregunta nueva a la encuesta
-    agregarPreguntas(preguntaTexto, opciones) {
-      if (opciones.length < 2) {
-        console.error("Una pregunta debe tener al menos 2 opciones.");
-        return;
-      }
-      const pregunta = new Pregunta(preguntaTexto, opciones);// Se crea un nuevo objeto Pregunta
-      this.preguntas.push(pregunta);
+    const pregunta = new Pregunta(preguntaTexto, opciones); // Se crea un nuevo objeto Pregunta
+    this.preguntas.push(pregunta);
 
     // Se agrega a la lista de preguntas
-    }
-    finalizarEncuesta() {
-      const total = this.preguntas.length;
-  
-      if (total < 8) {
-        const faltan = 8 - total;
-        console.log(`Debes agregar al menos 8 preguntas. Faltan ${faltan}.`);
-        return;
-      }
-  
-      this.permitirVotar = true;
-      console.log(" Encuesta finalizada. Ahora puedes comenzar a votar.");
+  }
+  finalizarEncuesta() {
+    const total = this.preguntas.length;
+
+    if (total < 8) {
+      const faltan = 8 - total;
+      console.log(`Debes agregar al menos 8 preguntas. Faltan ${faltan}.`);
+      return;
     }
 
+    this.permitirVotar = true;
+    console.log(" Encuesta finalizada. Ahora puedes comenzar a votar.");
+  }
 
-    // Método para votar en una pregunta específica
-    vote(preguntaIndex, opcionesIndex) {
-
-      if (preguntaIndex >= 0 && preguntaIndex < this.preguntas.length && this.preguntas.length >= 8) {
-        this.preguntas[preguntaIndex].vote(opcionesIndex);// vota por la opción seleccionada de la pregunta correspondiente
-      } else{
-        console.log("La encuesta no está activa para votar, faltan preguntas.");
-        return;
-      }
-    }
-  
-    // Muestra los resultados de todas las preguntas
-    mostrarResultados() {
-      console.log(`Resultados para: ${this.nombre}`);
-      this.preguntas.forEach((q, i) => {
-        console.log(`\n${i + 1}. ${q.texto}`);
-        q.Mostrar().forEach(result => console.log("- " + result));
-      });
+  // Método para votar en una pregunta específica
+  vote(preguntaIndex, opcionesIndex) {
+    if (
+      preguntaIndex >= 0 &&
+      preguntaIndex < this.preguntas.length &&
+      this.preguntas.length >= 8
+    ) {
+      this.preguntas[preguntaIndex].vote(opcionesIndex); // vota por la opción seleccionada de la pregunta correspondiente
+    } else {
+      console.log("La encuesta no está activa para votar, faltan preguntas.");
+      return;
     }
   }
-  
-  // Creamos una encuesta con 8 preguntas
-  const encuesta = new Encuesta("Encuesta de preferencias");
-  
- // encuesta.agregarPreguntas("¿Cuál es tu color favorito?", ["Rojo", "Azul", "Verde"]);
- // encuesta.agregarPreguntas("¿Qué deporte prefieres?", ["Fútbol", "Básquetbol", "Tenis"]);
-  encuesta.agregarPreguntas("¿Cuál es tu comida favorita?", ["Pizza", "Sushi", "Hamburguesa"]);
-  encuesta.agregarPreguntas("¿Qué tipo de música te gusta?", ["Pop", "Rock", "Clásica"]);
-  encuesta.agregarPreguntas("¿Qué red social usas más?", ["Instagram", "TikTok", "X"]);
-  encuesta.agregarPreguntas("¿Qué estación del año prefieres?", ["Verano", "Invierno", "Primavera"]);
-  encuesta.agregarPreguntas("¿Cuál es tu película favorita?", ["Matrix", "Titanic", "Avatar"]);
-  encuesta.agregarPreguntas("¿Qué animal prefieres?", ["Perro", "Gato", "Pájaro"]);
-  encuesta.agregarPreguntas("¿Qué tipo de vacaciones prefieres?", ["Playa", "Montaña", "Ciudad"]);
-  
-  encuesta.finalizarEncuesta();
 
-  // Simulamos votos (control de flujo, operadores, estructuras)
-  encuesta.vote(0, 1); // Azul
-  encuesta.vote(1, 0); // Fútbol
-  //encuesta.vote(2, 2); // Hamburguesa
-  //encuesta.vote(3, 1); // Rock
- // encuesta.vote(4, 0); // Instagram
- // encuesta.vote(5, 2); // Primavera
- // encuesta.vote(6, 2); // Avatar
- // encuesta.vote(7, 0); // Perro
- // encuesta.vote(0, 1); // Azul otra vez
-  
-  // Mostrar resultados en consola
-  encuesta.mostrarResultados();
+  // Muestra los resultados de todas las preguntas
+  mostrarResultados() {
+    console.log(`Resultados para: ${this.nombre}`);
+    this.preguntas.forEach((q, i) => {
+      console.log(`\n${i + 1}. ${q.texto}`);
+      q.Mostrar().forEach((result) => console.log("- " + result));
+    });
+  }
+}
+
+// interaccion con el usuario
+const titulo = prompt("Ingresa el título de tu encuesta:");
+const encuesta = new Encuesta(titulo);
+
+// 2. Agregar 8 preguntas con 3 opciones cada una
+for (let i = 0; i < 8; i++) {
+  const texto = prompt(`Escribe el texto de la pregunta ${i + 1}:`);
+  const opciones = [];
+  for (let j = 0; j < 3; j++) {
+    const opcion = prompt(`Ingresa la opción ${j + 1} para la pregunta ${i + 1}:`);
+    opciones.push(opcion);
+  }
+  encuesta.agregarPreguntas(texto, opciones);
+}
+
+// 3. Finalizar encuesta
+encuesta.finalizarEncuesta();
 
 
-  // === Interacción por consola === // PENDIENTE, para mejorar.
+let seguirVotando = true;
+while (seguirVotando) {
+  let preguntaIndex = parseInt(prompt("¿Sobre qué pregunta quieres votar? (1 a 8)")) - 1;
+
+  if (isNaN(preguntaIndex) || preguntaIndex < 0 || preguntaIndex >= encuesta.preguntas.length) {
+    alert("Número de pregunta inválido.");
+    continue;
+  }
+
+  const pregunta = encuesta.preguntas[preguntaIndex];
+
+  let opcionesTexto = "";
+  pregunta.opciones.forEach((opcion, i) => {
+    opcionesTexto += `${i + 1}. ${opcion}\n`;
+  });
+
+  let opcionElegida = parseInt(prompt(`\n${pregunta.texto}\n${opcionesTexto}\nElige una opción:`)) - 1;
+
+  if (isNaN(opcionElegida) || opcionElegida < 0 || opcionElegida >= pregunta.opciones.length) {
+    alert("Opción inválida.");
+    continue;
+  }
+
+  encuesta.vote(preguntaIndex, opcionElegida);
+  seguirVotando = confirm("¿Deseas seguir votando?");
+}
+
+// 5. Mostrar resultados
+encuesta.mostrarResultados();
+
+
+// === Interacción por consola === // PENDIENTE, para mejorar.

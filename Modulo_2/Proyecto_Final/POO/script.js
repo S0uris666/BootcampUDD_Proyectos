@@ -94,10 +94,22 @@ for (let i = 0; i < 8; i++) {
   }
   encuesta.agregarPreguntas(texto, opciones);
 }
+// 3. Preguntar si quiere agregar más preguntas
+let agregarMas = confirm("¿Deseas agregar más preguntas a la encuesta?");
+while (agregarMas) {
+  const texto = prompt(`Escribe el texto de la nueva pregunta:`);
+  const opciones = [];
+  for (let j = 0; j < 3; j++) {
+    const opcion = prompt(`Ingresa la opción ${j + 1}:`);
+    opciones.push(opcion);
+  }
+  encuesta.agregarPreguntas(texto, opciones);
 
-// 3. Finalizar encuesta
-encuesta.finalizarEncuesta();
+  agregarMas = confirm("¿Deseas agregar otra pregunta más?");
+}
 
+//  Finalizar encuesta
+encuesta.finalizarEncuesta(); // aqui sucede que el terminar encuesta esta demas ya que el for obliga que sea 8 preguntas, pero lo dejo para que se vea el flujo de la encuesta, antes lo necesitaba porque estaba implementandolo solo con clases
 
 let seguirVotando = true;
 while (seguirVotando) {
@@ -130,4 +142,4 @@ while (seguirVotando) {
 encuesta.mostrarResultados();
 
 
-// === Interacción por consola === // PENDIENTE, para mejorar.
+//Para mejorar

@@ -5,7 +5,6 @@ class Pregunta {
     this.opciones = opciones; // Opciones de respuesta (array)
     this.votes = new Array(opciones.length).fill(0); // Se crea un array del mismo largo que las opciones, lleno de ceros, para contar los votos por opción
   }
-
   // Método para votar por una opción (usamos operadores de comparación y aritméticos)
   vote(opcionesIndex) {
     if (opcionesIndex >= 0 && opcionesIndex < this.opciones.length) {
@@ -22,7 +21,6 @@ class Pregunta {
     );
   }
 }
-
 // Clase para manejar una encuesta completa con varias preguntas
 class Encuesta {
   constructor(nombre) {
@@ -30,7 +28,6 @@ class Encuesta {
     this.preguntas = []; // Contenedor de preguntas (objetos Pregunta)
     this.permitirVotar = false;
   }
-
   // Agrega una pregunta nueva a la encuesta
   agregarPreguntas(preguntaTexto, opciones) {
     if (opciones.length < 2) {
@@ -44,7 +41,6 @@ class Encuesta {
   }
   finalizarEncuesta() {
     const total = this.preguntas.length;
-
     if (total < 8) {
       const faltan = 8 - total;
       console.log(`Debes agregar al menos 8 preguntas. Faltan ${faltan}.`);
@@ -54,7 +50,6 @@ class Encuesta {
     this.permitirVotar = true;
     console.log(" Encuesta finalizada. Ahora puedes comenzar a votar.");
   }
-
   // Método para votar en una pregunta específica
   vote(preguntaIndex, opcionesIndex) {
     if (
@@ -68,7 +63,6 @@ class Encuesta {
       return;
     }
   }
-
   // Muestra los resultados de todas las preguntas
   mostrarResultados() {
     console.log(`Resultados para: ${this.nombre}`);
@@ -78,12 +72,10 @@ class Encuesta {
     });
   }
 }
-
 // interaccion con el usuario//ahora como funcion
 function crearYVotarEncuesta() {
   const titulo = prompt("Ingresa el título de tu encuesta:");
   const encuesta = new Encuesta(titulo);
-
   // Agregar 8 preguntas
   for (let i = 0; i < 8; i++) {
     const texto = prompt(`Escribe el texto de la pregunta ${i + 1}:`);
@@ -94,7 +86,6 @@ function crearYVotarEncuesta() {
     }
     encuesta.agregarPreguntas(texto, opciones);
   }
-
   // Agregar más preguntas si se desea
   let agregarMas = confirm("¿Deseas agregar más preguntas a la encuesta?");
   while (agregarMas) {
@@ -107,9 +98,7 @@ function crearYVotarEncuesta() {
     encuesta.agregarPreguntas(texto, opciones);
     agregarMas = confirm("¿Deseas agregar otra pregunta más?");
   }
-
   encuesta.finalizarEncuesta();
-
   // Votación
   let seguirVotando = true;
   while (seguirVotando) {
@@ -132,14 +121,11 @@ function crearYVotarEncuesta() {
       alert("Opción inválida.");
       continue;
     }
-
     encuesta.vote(preguntaIndex, opcionElegida);
     seguirVotando = confirm("¿Deseas seguir votando?");
   }
-
   encuesta.mostrarResultados();
 }
-
 // Función principal que permite crear varias encuestas
 function iniciarSistemaEncuestas() {
   let crearOtra = true;
@@ -148,6 +134,7 @@ function iniciarSistemaEncuestas() {
     crearOtra = confirm("¿Deseas crear otra encuesta?");
   }
 }
-
 // Ejecutar el sistema
 iniciarSistemaEncuestas();
+
+

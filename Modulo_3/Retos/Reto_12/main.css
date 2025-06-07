@@ -1,0 +1,23 @@
+.boton-color {
+  width: 100%;
+  padding-top: 100%; /* hace el botón cuadrado */
+  position: relative;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+/* Color visible dentro del botón cuadrado */
+.boton-color::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 10px;
+  background-color: currentColor;
+}
+
+.oculto {
+  visibility: hidden;
+}
